@@ -254,11 +254,12 @@ Accepted decisions:
   UTC time, receiver arrival time, and processing time.
 - [ADR 0002](adr/0002-source-session-sequence-identity.md) scopes monotonic time and
   frame ordering with a stable logical source, explicit session, and sequence number.
+- [ADR 0003](adr/0003-protocol-neutral-measurement-quality.md) represents each
+  measurement with explicit usability and protocol-neutral reasons.
 
 The remaining semantic contract for the v1 measurement frame must define:
 
-- protocol-neutral data quality;
 - per-phase representation and units; and
-- how partial or unavailable measurements are expressed.
+- the first executable's exact boundary and behavior.
 
 No C++ representation should be selected until these semantics are agreed.
