@@ -252,10 +252,11 @@ Accepted decisions:
 
 - [ADR 0001](adr/0001-time-semantics.md) separates source measurement time, optional
   UTC time, receiver arrival time, and processing time.
+- [ADR 0002](adr/0002-source-session-sequence-identity.md) scopes monotonic time and
+  frame ordering with a stable logical source, explicit session, and sequence number.
 
 The remaining semantic contract for the v1 measurement frame must define:
 
-- sequence and source identity;
 - protocol-neutral data quality;
 - per-phase representation and units; and
 - how partial or unavailable measurements are expressed.
