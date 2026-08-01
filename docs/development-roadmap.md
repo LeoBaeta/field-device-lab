@@ -262,11 +262,15 @@ Accepted decisions:
   with a finite, deterministic host CLI.
 - [The v1 executable contract](specs/v1-executable-contract.md) defines the first
   scenario, observable output, exclusions, and acceptance criteria.
+- [ADR 0006](adr/0006-use-strong-domain-types-and-thin-cli.md) selects owning strong
+  domain types, explicit validation, a reusable core, and a thin CLI boundary.
+- [The v1 C++ design](design/v1-cpp-domain-and-targets.md) sketches the initial domain
+  representation, target graph, source layout, and test seams.
 
-The v1 measurement-frame semantics and first executable boundary are now bounded. The
-next implementation design must define:
+The v1 semantics, executable boundary, and initial C++ target boundary are now bounded.
+The next implementation decision must define:
 
-- the initial C++ domain representation and target boundaries; and
-- the smallest CMake build that supports the accepted executable contract.
+- JSON serialization and dependency strategy; and
+- the smallest CMake/Conan build slice to implement first.
 
 No C++ representation should be selected until these semantics are agreed.
