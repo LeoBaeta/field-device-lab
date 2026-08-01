@@ -256,10 +256,12 @@ Accepted decisions:
   frame ordering with a stable logical source, explicit session, and sequence number.
 - [ADR 0003](adr/0003-protocol-neutral-measurement-quality.md) represents each
   measurement with explicit usability and protocol-neutral reasons.
+- [ADR 0004](adr/0004-three-phase-measurements-and-units.md) fixes Phase A/B/C
+  positions and schema-defined RMS voltage, current, and frequency units.
 
-The remaining semantic contract for the v1 measurement frame must define:
+The v1 measurement-frame semantics are now bounded. The next design decision must
+define:
 
-- per-phase representation and units; and
 - the first executable's exact boundary and behavior.
 
 No C++ representation should be selected until these semantics are agreed.
