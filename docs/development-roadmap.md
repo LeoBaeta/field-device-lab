@@ -266,11 +266,14 @@ Accepted decisions:
   domain types, explicit validation, a reusable core, and a thin CLI boundary.
 - [The v1 C++ design](design/v1-cpp-domain-and-targets.md) sketches the initial domain
   representation, target graph, source layout, and test seams.
+- [ADR 0007](adr/0007-use-conan-for-explicit-host-dependencies.md) assigns explicit
+  host dependency resolution to Conan while keeping CMake and Yocto provider-neutral.
+- [The v1 build design](design/v1-build-and-dependencies.md) defines dependency versions,
+  target consumption, JSON isolation, and the smallest mechanical build slice.
 
-The v1 semantics, executable boundary, and initial C++ target boundary are now bounded.
-The next implementation decision must define:
+The v1 design and dependency boundaries are now sufficient for the first mechanical
+implementation slice. Before creating files, agree on:
 
-- JSON serialization and dependency strategy; and
-- the smallest CMake/Conan build slice to implement first.
+- the exact first-file sequence and review checkpoints.
 
 No C++ representation should be selected until these semantics are agreed.
