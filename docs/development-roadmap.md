@@ -248,10 +248,13 @@ Phase-B voltage sag can be observed across the whole system:
 
 ## Current design frontier
 
-The next decision is the exact semantic contract for the v1 measurement frame,
-especially:
+Accepted decisions:
 
-- timestamp and clock behavior;
+- [ADR 0001](adr/0001-time-semantics.md) separates source measurement time, optional
+  UTC time, receiver arrival time, and processing time.
+
+The remaining semantic contract for the v1 measurement frame must define:
+
 - sequence and source identity;
 - protocol-neutral data quality;
 - per-phase representation and units; and
