@@ -258,10 +258,15 @@ Accepted decisions:
   measurement with explicit usability and protocol-neutral reasons.
 - [ADR 0004](adr/0004-three-phase-measurements-and-units.md) fixes Phase A/B/C
   positions and schema-defined RMS voltage, current, and frequency units.
+- [ADR 0005](adr/0005-start-with-deterministic-host-cli.md) starts executable evidence
+  with a finite, deterministic host CLI.
+- [The v1 executable contract](specs/v1-executable-contract.md) defines the first
+  scenario, observable output, exclusions, and acceptance criteria.
 
-The v1 measurement-frame semantics are now bounded. The next design decision must
-define:
+The v1 measurement-frame semantics and first executable boundary are now bounded. The
+next implementation design must define:
 
-- the first executable's exact boundary and behavior.
+- the initial C++ domain representation and target boundaries; and
+- the smallest CMake build that supports the accepted executable contract.
 
 No C++ representation should be selected until these semantics are agreed.
