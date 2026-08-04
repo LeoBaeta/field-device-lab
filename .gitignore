@@ -1,0 +1,41 @@
+# CMake build trees and generated user presets
+/build/
+/out/
+CMakeUserPresets.json
+
+# CMake-generated files from accidental in-source configuration
+/CMakeCache.txt
+/CMakeFiles/
+/cmake_install.cmake
+/CTestTestfile.cmake
+/Makefile
+/Testing/
+
+# Conan-generated state
+/.conan/
+conanbuild.sh
+conanrun.sh
+deactivate_conanbuild.sh
+deactivate_conanrun.sh
+
+# Compiler and analysis artifacts
+*.o
+*.obj
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+compile_commands.json
+*.gcda
+*.gcno
+*.gcov
+
+# Editor and operating-system state
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
