@@ -96,7 +96,37 @@ Two platform features are visible to the people who use the device:
   integrators what is enabled, what is exposed and how to restrict it further.
 
 The application stays deliberately small so that the device platform can be built,
-tested and explained around it. Additional electrical functions are added only when
+tested and explained around it.
+
+## Essential functions and fail state
+
+The device's **essential functions** are measuring the feeder, detecting and recording
+events, and signalling its own health. Security features must never stop these
+functions: a flooded management port, a full audit store or a locked-out account must
+leave measurement and event detection running.
+
+When normal operation cannot be maintained, the device enters a **defined fail state**:
+its health output drops (the equivalent of a real IED's "device healthy" contact
+opening) and every value it still publishes is flagged invalid. The fail state is
+deterministic and tested.
+
+## Security context
+
+The intended deployment, which the threat model and security guidelines build on:
+
+- The device sits on a substation LAN, behind a station firewall, and is never
+  exposed directly to the internet.
+- It has two network interfaces with separate rules: one for management (engineering
+  and security administration) and one for SCADA and telemetry.
+- It is installed in a locked substation cabinet. Physical access is possible for an
+  insider or intruder, so debug ports are locked and enclosure opening is detected.
+- The environment provides a time source, a certificate authority for operator and
+  device certificates, and a collector for security events.
+- The device runs no downloadable scripts or plugins and has no wireless interface.
+
+The target is security capability level 2 of ISA/IEC 62443-4-2, with selected level 3
+enhancements where the hardware supports them. This describes design intent, not a
+certification. Additional electrical functions are added only when
 they serve a bounded increment.
 
 ## Fictional deployment

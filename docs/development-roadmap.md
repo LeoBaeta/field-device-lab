@@ -249,22 +249,42 @@ Security work follows the structure of ISA/IEC 62443-4-1 (development lifecycle)
 
 - Reproducible build, tests, sanitizers, static analysis, compiler hardening flags,
   SBOM and vulnerability scanning in CI.
-- Threat model and a requirement-to-test traceability table for the targeted 62443-4-2
-  requirements.
+- Protected build and release: branch protection, pinned CI actions, signed tags,
+  signed or checksummed release artefacts and build provenance.
+- Security context, interface inventory, threat model and a requirement-to-test
+  traceability table for the targeted 62443-4-2 requirements (target: capability
+  level 2).
+- Vulnerability handling: intake, advisories with severity and affected versions, a
+  stated fix-time policy and release notes that say how to verify an update.
 - Embedded Linux image with a hardened, least-privileged and sandboxed service,
   default-deny network policy and documented debug-interface state.
-- A **hardening guide** for integrators and operators: default configuration, open
-  ports and services, further lock-down steps, secure decommissioning.
+- **Security guidelines** for integrators and operators: defense-in-depth layers, what
+  the environment must provide, default configuration and further lock-down steps,
+  secure operation, accounts and roles, secure decommissioning.
+- Separate management and SCADA/telemetry networks on the board's two Ethernet ports.
 - A **management interface** with users, roles and audit:
   - every command is attributed to an authenticated user and authorized by role;
   - roles follow the IEC 62351-8 model (viewer, operator, engineer, security
     administrator, security auditor), with separation of duties;
   - user identity and role come from the client's mTLS certificate; one local
     break-glass account covers password strength and failed-login lockout;
+  - an authorized role can change which permissions each role holds;
+  - certificates are validated, including revocation, and mapped to a user;
+  - sessions time out, can be terminated and are limited per user;
   - every command, successful or rejected, produces a tamper-evident audit record
-    (user, role, command, result, time).
-- Device identity, verified boot, encrypted data at rest and signed, recoverable A/B
-  updates.
+    (time, user, category, type, event ID, result) with synchronized UTC time;
+  - audit storage is bounded, warns before it fills, and never stops the essential
+    functions.
+- Lifecycle and availability commands: security self-test, configuration integrity
+  check, signed backup and restore, decommissioning with verified erase, a
+  machine-readable security-settings report and the device's component inventory.
+- The defined fail state (see the product concept), and essential functions that keep
+  running under a flood on the management port.
+- Device identity, supplier and asset-owner roots of trust, verified boot, tamper
+  detection, encrypted data at rest and signed, recoverable A/B updates.
+- Verification beyond unit tests: fuzzing, an attack-surface scan of the image against
+  an expected-ports list, and a written self-run penetration test. One developer cannot
+  provide independent testing; this limitation is stated rather than hidden.
 
 ### Explicitly deferred
 
@@ -278,6 +298,8 @@ Each targeted requirement has an artefact and a test that fails closed. For the
 management interface: an unauthorized command is rejected and audited, no default
 credentials exist, repeated failed logins lock the account, a security administrator
 cannot change device configuration, and no role can delete or alter the audit log.
+The traceability table cites requirement identifiers and describes the device's own
+behaviour; it does not reproduce text from the standards.
 
 ## End-to-end definition of completeness
 
