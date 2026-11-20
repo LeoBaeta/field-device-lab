@@ -137,13 +137,16 @@ electrical measurements.
 - State-transition and sequence-of-events records.
 - Unknown, contradictory, stale, and bouncing digital input behavior.
 - Simulated commands with validation, interlocks, feedback, timeout, and failure.
+  Every command passes through the management interface (see "Device platform and
+  security track"): it is attributed to an authenticated user, authorized by role, and
+  audited.
 - Restart and state-recovery scenarios.
 
 ### Acceptance direction
 
 Deterministic scenarios must demonstrate normal transitions as well as rejection or
-reporting of unsafe, contradictory, stale, and failed operations. All control remains
-simulated.
+reporting of unsafe, contradictory, stale, failed, and unauthorized operations. All
+control remains simulated.
 
 ## v5 — Real-time hardware experiment
 
@@ -189,7 +192,8 @@ simulated peers.
 - Map selected measurements, equipment states, quality, and timestamped events.
 - Connect to a simulated SCADA or control-center client.
 - Exercise interrogation, spontaneous reporting, connection loss, and recovery.
-- Consider simulated commands only after the v4 state model and interlocks exist.
+- Consider simulated commands only after the v4 state model, interlocks and role-based
+  authorization exist.
 
 ### Planned IEC 61850 work
 
@@ -230,6 +234,50 @@ and experiment health.
 An operator must be able to initiate a scenario and correlate the visual response with
 recorded measurements, event transitions, remote reports, and measured latency without
 the HMI becoming part of the safety-critical processing path.
+
+## Device platform and security track
+
+### Intent
+
+Build the [device platform layer](product-concept.md#product-layers) in parallel with
+the application milestones above. This track is not numbered with them: it starts with
+v1 and each capability attaches to the first application milestone that needs it.
+Security work follows the structure of ISA/IEC 62443-4-1 (development lifecycle) and
+62443-4-2 (component requirements), and is described as standards-informed only.
+
+### Planned capabilities
+
+- Reproducible build, tests, sanitizers, static analysis, compiler hardening flags,
+  SBOM and vulnerability scanning in CI.
+- Threat model and a requirement-to-test traceability table for the targeted 62443-4-2
+  requirements.
+- Embedded Linux image with a hardened, least-privileged and sandboxed service,
+  default-deny network policy and documented debug-interface state.
+- A **hardening guide** for integrators and operators: default configuration, open
+  ports and services, further lock-down steps, secure decommissioning.
+- A **management interface** with users, roles and audit:
+  - every command is attributed to an authenticated user and authorized by role;
+  - roles follow the IEC 62351-8 model (viewer, operator, engineer, security
+    administrator, security auditor), with separation of duties;
+  - user identity and role come from the client's mTLS certificate; one local
+    break-glass account covers password strength and failed-login lockout;
+  - every command, successful or rejected, produces a tamper-evident audit record
+    (user, role, command, result, time).
+- Device identity, verified boot, encrypted data at rest and signed, recoverable A/B
+  updates.
+
+### Explicitly deferred
+
+- Centralized authentication (RADIUS, LDAP) and remote role-information services.
+- Conformance claims against IEC 62443, IEC 62351 or IEEE 1686; these inform the design
+  only.
+
+### Acceptance direction
+
+Each targeted requirement has an artefact and a test that fails closed. For the
+management interface: an unauthorized command is rejected and audited, no default
+credentials exist, repeated failed logins lock the account, a security administrator
+cannot change device configuration, and no role can delete or alter the audit log.
 
 ## End-to-end definition of completeness
 

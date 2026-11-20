@@ -83,6 +83,18 @@ The product has two layers, which are developed and documented separately:
    development lifecycle) and 62443-4-2 (component requirements), described as
    standards-informed only to the extent demonstrated.
 
+Two platform features are visible to the people who use the device:
+
+- **Management interface with users, roles and audit.** Nobody operates the device
+  anonymously. Every command (reading status, acknowledging an alarm, changing a
+  threshold, managing users) is attributed to an authenticated user, allowed or refused
+  by that user's role, and recorded in an audit log. Roles follow the IEC 62351-8 model
+  for power-system equipment: viewer, operator, engineer, security administrator and
+  security auditor. This mirrors what utilities expect from substation IEDs (compare
+  IEEE 1686).
+- **Hardening.** The device ships locked down by default, and a hardening guide tells
+  integrators what is enabled, what is exposed and how to restrict it further.
+
 The application stays deliberately small so that the device platform can be built,
 tested and explained around it. Additional electrical functions are added only when
 they serve a bounded increment.
