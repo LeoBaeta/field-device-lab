@@ -46,29 +46,41 @@ The fictional feeder configuration is:
 | Setting | Value |
 |---|---:|
 | Topology | Three-phase, four-wire wye |
-| Nominal line-to-neutral voltage | 230 V RMS |
+| Primary system voltage | 13.8 kV RMS line-to-line |
+| Voltage transformer ratio | 13 800 V / 115 V (120:1) |
+| Current transformer ratio | 600 A / 5 A (120:1) |
+| Nominal secondary line-to-neutral voltage | 66.4 V RMS |
 | Nominal frequency | 60 Hz |
-| Voltage-sag detection threshold | below 207.0 V RMS |
-| Voltage-sag recovery threshold | at or above 211.6 V RMS |
+| Voltage-sag detection threshold | below 59.76 V RMS (secondary) |
+| Voltage-sag recovery threshold | at or above 61.09 V RMS (secondary) |
 
-The detection threshold is 90% of nominal voltage and the recovery threshold is 92%.
-Separate thresholds provide deterministic hysteresis. These are fictional scenario
-values, not protection settings or claims about a deployed grid.
+### Measurement side
+
+All voltages and currents in this scenario are **secondary** quantities: the values at
+the IED's analogue inputs, after the voltage and current transformers. The nominal
+secondary line-to-neutral voltage is 115 V / √3 ≈ 66.4 V, which corresponds to about
+7 967 V line-to-neutral on the 13.8 kV primary. V1 reports secondary values only;
+scaling to primary values is excluded (see "Explicit exclusions").
+
+The detection threshold is 90% of nominal voltage and the recovery threshold is about
+92%; the configured values in the table are authoritative. Separate thresholds provide
+deterministic hysteresis. These are fictional scenario values, not protection settings
+or claims about a deployed grid.
 
 ## Scenario frames
 
 All present values have `good` usability with no reasons. All phase currents are
-10.0 A RMS, all Phase-A and Phase-C voltages are 230.0 V RMS, and frequency is 60.0 Hz.
-Only Phase-B voltage changes:
+3.0 A RMS secondary (360 A primary), all Phase-A and Phase-C voltages are 66.4 V RMS
+secondary, and frequency is 60.0 Hz. Only Phase-B voltage changes:
 
-| Sequence | Time (ms) | Phase-B voltage (V RMS) | Expected transition |
+| Sequence | Time (ms) | Phase-B voltage (V RMS, secondary) | Expected transition |
 |---:|---:|---:|---|
-| 0 | 0 | 230.0 | none |
-| 1 | 20 | 230.0 | none |
-| 2 | 40 | 200.0 | sag started on Phase B |
-| 3 | 60 | 190.0 | none; sag remains active |
-| 4 | 80 | 205.0 | none; hysteresis keeps sag active |
-| 5 | 100 | 215.0 | sag ended on Phase B after 60 ms |
+| 0 | 0 | 66.4 | none |
+| 1 | 20 | 66.4 | none |
+| 2 | 40 | 58.0 | sag started on Phase B |
+| 3 | 60 | 55.0 | none; sag remains active |
+| 4 | 80 | 60.5 | none; hysteresis keeps sag active |
+| 5 | 100 | 62.5 | sag ended on Phase B after 60 ms |
 
 The event begins at the first frame below the detection threshold. It ends at the first
 frame at or above the recovery threshold. Duration is the difference between those two
@@ -92,8 +104,8 @@ A measurement record exposes at least:
 - `session_id`;
 - `sequence`;
 - `measurement_time_ms`;
-- Phase A/B/C qualified RMS line-to-neutral voltage in volts;
-- Phase A/B/C qualified RMS line current in amperes; and
+- Phase A/B/C qualified RMS line-to-neutral secondary voltage in volts;
+- Phase A/B/C qualified RMS secondary line current in amperes; and
 - qualified system frequency in hertz.
 
 Each qualified value exposes its optional numeric value, usability, and reason list.
@@ -108,7 +120,7 @@ An event record exposes:
 - `phase` with value `b`;
 - `transition` with value `started` or `ended`;
 - `measurement_time_ms`;
-- the observed RMS voltage in volts; and
+- the observed secondary RMS voltage in volts; and
 - `duration_ms` on the ended transition.
 
 The started event occurs at 40 ms. The ended event occurs at 100 ms and reports a
@@ -146,6 +158,7 @@ V1 does not include:
 
 - external scenario files;
 - raw waveform generation or RMS calculation;
+- scaling secondary values to primary values through transformer ratios;
 - real-time pacing or concurrency;
 - networking or IPC;
 - persistence;
