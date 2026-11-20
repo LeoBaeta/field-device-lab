@@ -15,6 +15,78 @@ IEC 60870-5-104 and IEC 61850 interoperability experiments.
 This is an educational monitoring system. It is not protection equipment, production
 control equipment, or a standards-conformant utility product.
 
+## Background: distribution feeders and IEDs
+
+Electricity reaches a distribution substation at high voltage and is stepped down to
+medium voltage, typically 13.8 kV in Brazil. Several medium-voltage lines leave the
+substation bus, each supplying a neighbourhood, an industrial area or a rural region.
+Each of these lines is a **distribution feeder**. Along the feeder, distribution
+transformers step the voltage down again for end consumers.
+
+```mermaid
+flowchart LR
+    TX["Transmission<br/>(high voltage)"] --> SS["Distribution substation<br/>HV → 13.8 kV bus"]
+
+    subgraph BAY1["Feeder bay 1"]
+        direction TB
+        B1["Circuit breaker"]
+        IED1["IED<br/>(this project)"]
+        IED1 -. "VT/CT measurements" .- B1
+    end
+
+    SS --> B1
+    SS --> B2["Feeder bay 2<br/>breaker + IED"]
+    SS --> B3["Feeder bay 3<br/>breaker + IED"]
+
+    B1 -- "feeder 1 · 13.8 kV" --> DT["Distribution transformers"] --> C["Consumers"]
+    B2 -- "feeder 2" --> IND["Industrial area"]
+    B3 -- "feeder 3" --> RUR["Rural region"]
+
+    IED1 -- "events and measurements" --> SCADA["Station / control center<br/>(SCADA)"]
+```
+
+Each feeder has a circuit breaker at the substation and one or more **intelligent
+electronic devices (IEDs)** beside it. An IED is an embedded computer that:
+
+- reads voltage and current through instrument transformers (voltage transformers, VTs,
+  and current transformers, CTs), which scale primary quantities down to safe secondary
+  levels such as 115 V line-to-line and 5 A;
+- calculates RMS values, frequency and derived quantities;
+- detects abnormal conditions such as sags, swells, overcurrent and phase loss;
+- timestamps and records events; and
+- reports state to a local operator and to a station or control-center system (SCADA)
+  over protocols such as IEC 61850, DNP3 or IEC 60870-5-104.
+
+## Comparable real devices
+
+Field Device Lab emulates a **class of device**, not a specific product. Its closest
+real counterparts are feeder monitoring IEDs and power-quality meters: devices that
+measure, detect, record and report, but do not decide to trip the breaker. Feeder
+protection relays perform similar measurement but add protection functions that issue
+trip commands; those functions are outside this project.
+
+Because the device is monitoring-only, no function in it is safety-critical, and its
+behaviour can be demonstrated entirely with synthetic data.
+
+## Product layers
+
+The product has two layers, which are developed and documented separately:
+
+1. **Application:** the monitoring service. It receives three-phase measurements,
+   validates them, detects and records events, and publishes measurements, events and
+   device health.
+2. **Device platform:** everything a real connected field device needs around the
+   application: a reproducible build and quality pipeline, an embedded Linux image, a
+   hardened and least-privileged service, device identity, verified boot, signed and
+   recoverable updates, a threat model, software bill of materials and vulnerability
+   handling. Security work follows the structure of ISA/IEC 62443-4-1 (secure
+   development lifecycle) and 62443-4-2 (component requirements), described as
+   standards-informed only to the extent demonstrated.
+
+The application stays deliberately small so that the device platform can be built,
+tested and explained around it. Additional electrical functions are added only when
+they serve a bounded increment.
+
 ## Fictional deployment
 
 The emulated IED is installed at a distribution feeder. A measurement front end
@@ -24,6 +96,21 @@ operator, and may publish selected information to a station or control-center sy
 
 Everything outside the IED is simulated. The project does not require or permit direct
 connection to mains voltage.
+
+The reference feeder is fictional:
+
+| Setting | Value |
+|---|---:|
+| Topology | Three-phase, four-wire wye |
+| Primary system voltage | 13.8 kV RMS line-to-line (≈ 7 967 V line-to-neutral) |
+| Voltage transformer ratio | 13 800 V / 115 V (120:1) |
+| Current transformer ratio | 600 A / 5 A (120:1) |
+| Nominal secondary line-to-neutral voltage | 66.4 V RMS (115 V / √3) |
+| Nominal frequency | 60 Hz |
+
+The IED's inputs see **secondary** values. Unless a document states otherwise,
+measurements are expressed as secondary quantities. Scaling to primary values through
+the transformer ratios is a later capability.
 
 Candidate scenarios include:
 
@@ -93,7 +180,6 @@ This concept does not yet choose:
 
 - whether the first input contains raw waveform samples or calculated measurements;
 - sampling frequency, windowing, synchronization, or numerical methods;
-- nominal voltage, current, and frequency values;
 - event thresholds, timing requirements, or severity rules;
 - the initial host/ESP32/BeagleBone responsibility split;
 - the link and application protocol between hardware nodes;
