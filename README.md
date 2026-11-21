@@ -90,4 +90,11 @@ The accepted rationale and detailed dependency graph are documented in
 
 ## License
 
-Licensed under the Apache License 2.0. See [LICENSE](LICENSE).
+Copyright (C) 2026 Leonardo Baeta Lopes.
+
+Licensed under the GNU General Public License, version 3 only (`GPL-3.0-only`). You may
+use, study, modify and share this project; if you distribute it or work based on it,
+you must do so under the same license with its source code. See [LICENSE](LICENSE).
+
+Earlier commits were published under the Apache License 2.0; copies obtained under that
+license keep it. From this commit on, the project is GPL-3.0-only.
