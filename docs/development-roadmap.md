@@ -194,6 +194,8 @@ simulated peers.
 - Exercise interrogation, spontaneous reporting, connection loss, and recovery.
 - Consider simulated commands only after the v4 state model, interlocks and role-based
   authorization exist.
+- Stretch: protect the IEC 60870-5-104 link with TLS, following the approach of
+  IEC 62351-3.
 
 ### Planned IEC 61850 work
 
@@ -282,6 +284,17 @@ Security work follows the structure of ISA/IEC 62443-4-1 (development lifecycle)
   running under a flood on the management port.
 - Device identity, supplier and asset-owner roots of trust, verified boot, tamper
   detection, encrypted data at rest and signed, recoverable A/B updates.
+- **Keys and PKI**: a key inventory covering every key's full lifecycle; an offline
+  root CA with separate issuing CAs for devices, operators and code signing; certificate
+  renewal and revocation; signing keys held on a hardware token; a recorded key
+  ceremony; rotation of update-signing, device, telemetry and disk keys; and a
+  compromise drill. Device keys are generated on the device and never leave it.
+- Bootloader and kernel lock-down: a locked and signed bootloader environment, no
+  console or autoboot interrupt in production, kernel lockdown mode.
+- Supply chain and disclosure: reproducible builds, a VEX document for known CVEs and
+  machine-readable (CSAF) security advisories.
+- Incident response: a runbook for a suspected compromised device, exercised once.
+- Memory safety at the untrusted-input boundary: one parser in Rust, fuzzed.
 - Verification beyond unit tests: fuzzing, an attack-surface scan of the image against
   an expected-ports list, and a written self-run penetration test. One developer cannot
   provide independent testing; this limitation is stated rather than hidden.
