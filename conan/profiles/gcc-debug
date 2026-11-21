@@ -1,0 +1,12 @@
+# Host profile for native GCC Debug builds and tests.
+# Inherits the detected machine settings (compiler version, standard library, arch)
+# and pins what the project requires, so builds do not depend on a personal default.
+include(default)
+
+[settings]
+build_type=Debug
+compiler=gcc
+compiler.cppstd=20
+
+[conf]
+tools.cmake.cmaketoolchain:generator=Ninja

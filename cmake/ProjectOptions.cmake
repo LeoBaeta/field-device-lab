@@ -1,3 +1,8 @@
+# Standard C++ only, without GNU extensions (-std=c++20, not -std=gnu++20). Set in the
+# project rather than left to a toolchain file, so it holds whichever provider
+# configured the build (Conan toolchain, Yocto SDK or recipe).
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 option(
     FIELD_DEVICE_WARNINGS_AS_ERRORS
     "Treat project compiler warnings as errors"

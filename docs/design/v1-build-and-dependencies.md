@@ -118,15 +118,20 @@ Dependency resolution is a visible prerequisite:
 
 ```text
 conan profile detect --force  # only when establishing a local profile
-conan install . --build=missing -s build_type=Debug
-cmake --preset <generated-or-authored-debug-preset>
-cmake --build --preset <debug-build-preset>
-ctest --preset <debug-test-preset>
+conan install . --build=missing -pr:h conan/profiles/gcc-debug
+cmake --preset gcc-debug
+cmake --build --preset gcc-debug
+ctest --preset gcc-debug
 ```
 
-The exact preset names and output folders are selected when the first files are
-implemented. Project documentation must distinguish one-time profile creation from the
-normal build loop.
+The committed host profile `conan/profiles/gcc-debug` includes the detected default
+profile and pins GCC, Debug, `compiler.cppstd=20` and the Ninja generator. Project
+documentation must distinguish one-time profile creation from the normal build loop.
+
+The project also sets `CMAKE_CXX_EXTENSIONS OFF` itself. A profile with
+`compiler.cppstd=gnu17` makes the Conan toolchain enable GNU extensions, and the Yocto
+build does not use the Conan toolchain at all, so standard C++ must not depend on the
+dependency provider.
 
 CMake and Conan must use the same compiler, standard library ABI, architecture, and
 build type. CI starts from explicit profiles rather than relying on a developer's

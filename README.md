@@ -43,18 +43,17 @@ conan profile show
 ```
 
 Conan stores this machine-local configuration outside the repository under
-`~/.conan2/profiles/`.
+`~/.conan2/profiles/`. The project does not build with it directly: the committed host
+profile [`conan/profiles/gcc-debug`](conan/profiles/gcc-debug) includes it and pins what
+the project needs (GCC, Debug, standard C++20, Ninja), so every machine and CI resolve
+dependencies with the same settings.
 
 ## Configure and build
 
 Run dependency resolution explicitly before CMake configuration:
 
 ```bash
-conan install . \
-  --build=missing \
-  -s build_type=Debug \
-  -s compiler.cppstd=20 \
-  -c tools.cmake.cmaketoolchain:generator=Ninja
+conan install . --build=missing -pr:h conan/profiles/gcc-debug
 ```
 
 Then configure and build with the authored GCC Debug preset:
@@ -70,9 +69,9 @@ Once test targets are present, run them with:
 ctest --preset gcc-debug
 ```
 
-The current mechanical checkpoint has no source or test targets yet, so configuration
-and the empty build succeed, while the strict test preset intentionally reports an
-error until the first test is registered.
+The current checkpoint builds the `field_device_core` library but registers no test
+yet, so the strict test preset intentionally reports an error until the first test
+exists.
 
 Generated Conan metadata, CMake user presets, and build output are placed under
 `build/` or other ignored paths and must not be committed.
