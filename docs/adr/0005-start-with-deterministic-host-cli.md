@@ -6,8 +6,8 @@ Date: 2026-08-01
 
 ## Context
 
-The first executable must prove one end-to-end product behavior while supporting the
-Month 1 CMake, testing, analysis, and CI work. Beginning with hardware, networking, a
+The first executable must prove one end-to-end product behavior and give the first
+CMake, testing, static-analysis, and CI work a real program to build and check. Beginning with hardware, networking, a
 long-running service, or real-time pacing would introduce lifecycle and infrastructure
 concerns before the measurement and event boundaries have executable evidence.
 

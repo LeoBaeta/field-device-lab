@@ -9,7 +9,7 @@ Date: 2026-08-01
 ADRs 0001 through 0005 define the first measurement frame, event behavior, and
 executable boundary without selecting C++ representations. V1 now needs a design that
 makes units, identity, time, and quality difficult to mix accidentally while remaining
-small enough for the Month 1 build and quality work.
+small enough for the first build and quality work.
 
 A generic structure made mostly of strings, integers, and doubles would be quick to
 write but would permit category and unit mistakes. At the other extreme, a hierarchy of

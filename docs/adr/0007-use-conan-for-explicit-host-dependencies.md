@@ -7,8 +7,8 @@ Date: 2026-08-01
 ## Context
 
 The first executable needs correct JSON serialization and GoogleTest-based unit tests.
-The career plan also calls for authored CMake and a demonstrated Conan workflow while
-preserving Yocto as the future target dependency authority.
+The host build uses hand-written, target-based CMake and an explicit Conan dependency
+workflow, while Yocto remains the future target dependency authority.
 
 CMake can consume dependencies from many providers. Making it download packages or
 invoke a package manager during configuration would mix responsibilities, obscure
@@ -118,8 +118,8 @@ authority.
 
 ### Vendor dependency source trees
 
-Rejected because it would add third-party code and update work to this portfolio without
-improving the demonstrated architecture.
+Rejected because it would add third-party code and update work to this repository without
+improving the architecture.
 
 ## Deferred decisions
 
